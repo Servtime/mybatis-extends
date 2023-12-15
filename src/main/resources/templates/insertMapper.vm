@@ -1,0 +1,90 @@
+<script>
+        #if($!methodName=='addObj')
+        INSERT
+        INTO
+            ${columnWrap.tableName}
+        <foreach
+        collection = "columnWrap.getField2ColumnBoMap().entrySet()"
+        separator = ","
+        open = "("
+        close = ")"
+        item = "value"
+        index = "key" >
+                    ${value.column}
+                </foreach>
+        values
+        <foreach
+        collection = "columnWrap.datas"
+        separator = ","
+        item = "value" >
+                < foreach
+        collection = "columnWrap.getField2ColumnBoMap().entrySet()"
+        separator = ","
+        open = "("
+        close = ")"
+        item = "columnValue"
+        index = "key">
+                #{value.${columnValue.fieldName},jdbcType=${columnValue.jdbcType.name()}}
+                </foreach>
+        </foreach>
+        #end
+        ##批量插入，oracle和mysql的会有一点差异
+        #if($!methodName=='addObjBatch')
+            #if($!sqlversion=='oracle')
+            INSERT ALL
+            <foreach
+            collection = "columnWrap.datas"
+            item = "value">
+            INTO  ${columnWrap.tableName}
+            <foreach
+            collection = "columnWrap.getField2ColumnBoMap().entrySet()"
+            separator = ","
+            open = "("
+            close = ")"
+            item = "value"
+            index = "key" >
+                ${value.column}
+            </foreach>
+            values
+            <foreach
+            collection = "columnWrap.getField2ColumnBoMap().entrySet()"
+            separator = ","
+            open = "("
+            close = ")"
+            item = "columnValue"
+            index = "key">
+            #{value.${columnValue.fieldName},jdbcType=${columnValue.jdbcType.name()}}
+            </foreach>
+            </foreach>
+            select 1 from dual
+            #elseif($!sqlversion=='mysql')
+            INSERT
+            INTO
+                ${columnWrap.tableName}
+            < foreach
+            collection = "columnWrap.getField2ColumnBoMap().entrySet()"
+            separator = ","
+            open = "("
+            close = ")"
+            item = "value"
+            index = "key" >
+                ${value.column}
+            < /foreach>
+            values
+            < foreach
+            collection = "columnWrap.datas"
+            separator = ","
+            item = "value" >
+            < foreach
+            collection = "columnWrap.getField2ColumnBoMap().entrySet()"
+            separator = ","
+            open = "("
+            close = ")"
+            item = "columnValue"
+            index = "key" >
+            #{value.${columnValue.fieldName},jdbcType=${columnValue.jdbcType.name()}}
+            </foreach>
+            < /foreach>
+            #end
+        #end
+</script>
