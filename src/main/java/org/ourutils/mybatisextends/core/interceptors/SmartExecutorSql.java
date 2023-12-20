@@ -3,6 +3,7 @@ package org.ourutils.mybatisextends.core.interceptors;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.apache.ibatis.builder.annotation.ProviderMethodResolver;
 import org.apache.velocity.Template;
@@ -70,23 +71,23 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
                 @Override
                 public String load(ProviderContext key) throws Exception {
                     Class<?>[] classes = key.getMapperMethod().getParameterTypes();
-                    return SmartExecutorSql.paraseColumnWrap(classes, key.getMapperMethod());
+                    return SmartExecutorSql.paraseColumnWrap(classes, key.getMapperMethod(), key.getDatabaseId());
                 }
             });
 
     /**
      * @param classes
      */
-    private static String paraseColumnWrap(Class<?>[] classes, Method method) {
+    private static String paraseColumnWrap(Class<?>[] classes, Method method, String databaseId) {
         Class clazz = classes[0];
         if (DeleteColumnWrap.class.equals(clazz)) {
-            return doParaseDel(clazz, method);
+            return doParaseDel(clazz, method, databaseId);
         } else if (SelectColumnWrap.class.equals(clazz)) {
-            return doParaseSelect(clazz, method);
+            return doParaseSelect(clazz, method, databaseId);
         } else if (InsertColumnWrap.class.equals(clazz)) {
-            return doParaseInsert(clazz, method);
+            return doParaseInsert(clazz, method, databaseId);
         } else if (UpdateColumnWrap.class.equals(clazz)) {
-            return doParaseUpdate(clazz, method);
+            return doParaseUpdate(clazz, method, databaseId);
         } else {
             log.error("不支持的入参类型");
         }
@@ -98,11 +99,14 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseUpdate(Class clazz, Method method) {
+    private static String doParaseUpdate(Class clazz, Method method, String databaseId) {
         Template template = velocityEngine.getTemplate("updateMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
     }
@@ -112,18 +116,18 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseInsert(Class clazz, Method method) {
+    private static String doParaseInsert(Class clazz, Method method, String databaseId) {
 
         String result = "";
         String methodName = method.getName();
         switch (methodName) {
             case "addObj":
                 //单个插入
-                result = doParaseSigalInsert(clazz, method);
+                result = doParaseSigalInsert(clazz, method, databaseId);
                 break;
             case "addObjBatch":
                 //批量插入
-                result = doParaseBatchInsert(clazz, method);
+                result = doParaseBatchInsert(clazz, method,databaseId);
                 break;
         }
 
@@ -136,13 +140,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      * @param clazz
      * @param method
      */
-    private static String doParaseBatchInsert(Class clazz, Method method) {
+    private static String doParaseBatchInsert(Class clazz, Method method, String databaseId) {
 
         Template template = velocityEngine.getTemplate("insertMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
-        contentContext.put("sqlversion", "mysql");
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
     }
@@ -153,12 +159,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      * @param clazz
      * @param method
      */
-    private static String doParaseSigalInsert(Class clazz, Method method) {
+    private static String doParaseSigalInsert(Class clazz, Method method, String databaseId) {
 
         Template template = velocityEngine.getTemplate("insertMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
 
@@ -170,12 +179,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseSelect(Class clazz, Method method) {
+    private static String doParaseSelect(Class clazz, Method method, String databaseId) {
 
         Template template = velocityEngine.getTemplate("selectMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
 
@@ -186,11 +198,14 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseDel(Class clazz, Method method) {
+    private static String doParaseDel(Class clazz, Method method, String databaseId) {
         Template template = velocityEngine.getTemplate("deleteMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
 
