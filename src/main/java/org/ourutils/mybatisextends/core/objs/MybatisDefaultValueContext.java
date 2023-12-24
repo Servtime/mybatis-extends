@@ -1,26 +1,22 @@
-package org.ourutils.mybatisextends.po;
+package org.ourutils.mybatisextends.core.objs;
 
 import lombok.Data;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.ourutils.mybatisextends.constants.annotations.DefaultValueFill;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+import java.util.Collection;
 
 /**
  *******************************************************************************
  *    系统名称   ： mybatis-extends项目
  *    客户      ：  *
- *    文件名    ： org.ourutils.mybatisextends.po.LockRecordPo.java
+ *    文件名    ： org.ourutils.mybatisextends.core.objs.MybatisDefaultValueContext.java
  *              (C) Copyright 2023 our-utils Corporation
  *               All Rights Reserved.
  * *****************************************************************************
  * <PRE>
  * 作用
- *       测试类
+ *       mybatis填充默认属性的上下文磊
  * 限制
  *       无。
  * 注意事项
@@ -29,23 +25,30 @@ import java.util.Date;
  * -----------------------------------------------------------------------------
  *         VERSION       DATE            @author       CHANGE/COMMENT
  * -----------------------------------------------------------------------------
- *         1.0.0        2023/12/13          wsil      create
+ *         1.0.0        2023/12/21          wsil      create
  * -----------------------------------------------------------------------------
  * </PRE>
  **/
-@Table(name = "lock_record")
 @Data
-public class LockRecordPo implements Serializable {
+public class MybatisDefaultValueContext {
 
-    @Id
-    private Integer id;
+    /**
+     * SQL的操作类型
+     */
+    private SqlCommandType sqlCommandType;
 
+    /**
+     * 同批次的其他对象
+     */
+    private Collection<Object> allObj;
 
-    @Column(name = "lock_time")
-    @DefaultValueFill(happendTime = {SqlCommandType.INSERT})
-    private Date lockTime;
+    /**
+     * 被填充的对象
+     */
+    private Object obj;
 
-
-    private String des;
-
+    /**
+     * 注解信息
+     */
+    private DefaultValueFill defaultValueFill;
 }

@@ -1,26 +1,18 @@
-package org.ourutils.mybatisextends.po;
+package org.ourutils.mybatisextends.core.objs;
 
-import lombok.Data;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.ourutils.mybatisextends.constants.annotations.DefaultValueFill;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+import java.lang.reflect.Field;
 
 /**
  *******************************************************************************
  *    系统名称   ： mybatis-extends项目
  *    客户      ：  *
- *    文件名    ： org.ourutils.mybatisextends.po.LockRecordPo.java
+ *    文件名    ： org.ourutils.mybatisextends.core.objs.MybatisDefaultValue.java
  *              (C) Copyright 2023 our-utils Corporation
  *               All Rights Reserved.
  * *****************************************************************************
  * <PRE>
  * 作用
- *       测试类
+ *       默认值接口
  * 限制
  *       无。
  * 注意事项
@@ -29,23 +21,22 @@ import java.util.Date;
  * -----------------------------------------------------------------------------
  *         VERSION       DATE            @author       CHANGE/COMMENT
  * -----------------------------------------------------------------------------
- *         1.0.0        2023/12/13          wsil      create
+ *         1.0.0        2023/12/21          wsil      create
  * -----------------------------------------------------------------------------
  * </PRE>
  **/
-@Table(name = "lock_record")
-@Data
-public class LockRecordPo implements Serializable {
+public interface MybatisDefaultValue {
 
-    @Id
-    private Integer id;
-
-
-    @Column(name = "lock_time")
-    @DefaultValueFill(happendTime = {SqlCommandType.INSERT})
-    private Date lockTime;
-
-
-    private String des;
-
+    /**
+     * @author wsil
+     * @date 2023/12/21
+     * @param  mybatisDefaultValueContext 填充默认指的对象
+     * @param field 列
+     * @return
+     * <p>
+     * 该方法的作用：
+     *    默认值填充回调
+     * </p>
+     */
+    public void fillValue(MybatisDefaultValueContext mybatisDefaultValueContext, Field field);
 }

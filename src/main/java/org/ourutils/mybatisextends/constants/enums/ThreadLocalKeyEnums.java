@@ -1,26 +1,19 @@
-package org.ourutils.mybatisextends.po;
+package org.ourutils.mybatisextends.constants.enums;
 
-import lombok.Data;
-import org.apache.ibatis.mapping.SqlCommandType;
-import org.ourutils.mybatisextends.constants.annotations.DefaultValueFill;
-
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  *******************************************************************************
  *    系统名称   ： mybatis-extends项目
  *    客户      ：  *
- *    文件名    ： org.ourutils.mybatisextends.po.LockRecordPo.java
+ *    文件名    ： org.ourutils.mybatisextends.constants.enums.ThreadLocalKeyEnums.java
  *              (C) Copyright 2023 our-utils Corporation
  *               All Rights Reserved.
  * *****************************************************************************
  * <PRE>
  * 作用
- *       测试类
+ *       线程上下文枚举类
  * 限制
  *       无。
  * 注意事项
@@ -29,23 +22,17 @@ import java.util.Date;
  * -----------------------------------------------------------------------------
  *         VERSION       DATE            @author       CHANGE/COMMENT
  * -----------------------------------------------------------------------------
- *         1.0.0        2023/12/13          wsil      create
+ *         1.0.0        2023/12/24          wsil      create
  * -----------------------------------------------------------------------------
  * </PRE>
  **/
-@Table(name = "lock_record")
-@Data
-public class LockRecordPo implements Serializable {
+@AllArgsConstructor
+@Getter
+public enum ThreadLocalKeyEnums {
 
-    @Id
-    private Integer id;
-
-
-    @Column(name = "lock_time")
-    @DefaultValueFill(happendTime = {SqlCommandType.INSERT})
-    private Date lockTime;
-
+    DATASOURCE_PRODUCT("数据库类型");
 
     private String des;
+
 
 }

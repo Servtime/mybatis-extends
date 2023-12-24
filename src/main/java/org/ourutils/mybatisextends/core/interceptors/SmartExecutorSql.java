@@ -10,12 +10,14 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.ourutils.mybatisextends.constants.enums.ThreadLocalKeyEnums;
 import org.ourutils.mybatisextends.core.objs.DeleteColumnWrap;
 import org.ourutils.mybatisextends.core.objs.InsertColumnWrap;
 import org.ourutils.mybatisextends.core.objs.LoggerWrap;
 import org.ourutils.mybatisextends.core.objs.LoggerWrapFactory;
 import org.ourutils.mybatisextends.core.objs.SelectColumnWrap;
 import org.ourutils.mybatisextends.core.objs.UpdateColumnWrap;
+import org.ourutils.mybatisextends.utils.DataSourceThreadLocalUtils;
 
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -71,15 +73,16 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
                 @Override
                 public String load(ProviderContext key) throws Exception {
                     Class<?>[] classes = key.getMapperMethod().getParameterTypes();
-                    return SmartExecutorSql.paraseColumnWrap(classes, key.getMapperMethod(), key.getDatabaseId());
+                    return SmartExecutorSql.paraseColumnWrap(classes, key.getMapperMethod());
                 }
             });
 
     /**
      * @param classes
      */
-    private static String paraseColumnWrap(Class<?>[] classes, Method method, String databaseId) {
+    private static String paraseColumnWrap(Class<?>[] classes, Method method) {
         Class clazz = classes[0];
+        String databaseId = DataSourceThreadLocalUtils.getValue(ThreadLocalKeyEnums.DATASOURCE_PRODUCT.name());
         if (DeleteColumnWrap.class.equals(clazz)) {
             return doParaseDel(clazz, method, databaseId);
         } else if (SelectColumnWrap.class.equals(clazz)) {

@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,11 +58,11 @@ public class MybatisMains {
             //批量添加
             addBatch(mapper);
             //批量删除
-            delBatch(mapper);
-            //批量查询
-            selectBatch(mapper);
-            //批量修改
-            updateBatch(mapper);
+//            delBatch(mapper);
+//            //批量查询
+//            selectBatch(mapper);
+//            //批量修改
+//            updateBatch(mapper);
 
             session.commit();
 
@@ -158,8 +157,6 @@ public class MybatisMains {
         for (int i = 100; i < 199; i++) {
             LockRecordPo lockRecordPo = new LockRecordPo();
             lockRecordPo.setId(i);
-
-            lockRecordPo.setLockTime(new Date());
             lockRecordPo.setDes("123456");
             lockRecordPoList.add(lockRecordPo);
         }
