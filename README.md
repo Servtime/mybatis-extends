@@ -7,6 +7,20 @@ mybatis-extends的1.0.0版本仅仅只提供了基础的，针对单表的增删
 我们会在3.1.x版本中，完成基于 mybatis-extends的多表关联。<br/>
 
 # mybatis-extends的使用
+## MAVEN引用
+目前，项目仅支持maven项目的引用，引用信息如下:
+```
+<dependency>
+<groupId>cn.org.our-utils</groupId>
+<artifactId>mybatis-extends</artifactId>
+<version>XX</version>
+</dependency>
+```
+XX代表版本，各个版本支持功能如下
+* 1.0.0-RELEASE:支持基础的增删改查、批量插入、批量更新，兼容mysql、oracle的批量查询语法特性
+
+## 使用
+
 mybatis-extends不会对你的项目造成任何侵入式的伤害，他非常独立，使用也非常简单，下面一个列子就展示了它的增删改查功能：
 
 ```
