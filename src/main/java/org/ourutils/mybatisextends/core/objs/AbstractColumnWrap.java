@@ -107,9 +107,9 @@ public class AbstractColumnWrap<T> implements ColumnWrap<T> {
     }
 
     /**
-     * 获取行社集合
+     * 获取PO对象，所有属性和属性描述信息映射的集合
      *
-     * @return
+     * @return 属性和属性描述信息映射集合
      */
     public Map<Field, Field2ColumnBo> getField2ColumnBoMap() {
 
@@ -130,7 +130,7 @@ public class AbstractColumnWrap<T> implements ColumnWrap<T> {
     /**
      * 完成构建
      *
-     * @return
+     * @return 构建完毕的对象
      */
     public AbstractColumnWrap build() {
 

@@ -141,12 +141,12 @@ public class ResultSetHandlerInterceptor implements Interceptor {
         /**
          * 重新注入默认的resultHandler
          *
-         * @param rsw
-         * @param resultMap
-         * @param resultHandler
-         * @param rowBounds
-         * @param parentMapping
-         * @throws SQLException
+         * @param rsw mybatis处理结果的对象
+         * @param resultMap mybatis的结果集映射对象
+         * @param resultHandler mybatis提供的结果回调处理对象
+         * @param rowBounds mybatis提供的逻辑分页对象
+         * @param parentMapping mybatis提供的可继承的结果映射对象
+         * @throws SQLException 异常包装类
          */
         @Override
         public void handleRowValues(ResultSetWrapper rsw, ResultMap resultMap, ResultHandler<?> resultHandler, RowBounds rowBounds, ResultMapping parentMapping) throws SQLException {

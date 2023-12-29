@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * *****************************************************************************
  * <PRE>
  * 作用
- *       默认值填充注解
+ *       默认值填充注解.该注解可以满足自增ID、创建日期、更新日期等需求
  * 限制
  *       无。
  * 注意事项
@@ -40,27 +40,55 @@ import java.lang.annotation.Target;
 public @interface DefaultValueFill {
 
     /**
-     * 生效条件
+     * @author wsil
+     * @return 判断触发条件
+     * <p>       
+     * 该方法的作用：
+     *
+     * </p>       
      */
     DefaultValueFillCause defaultValueFillCause() default DefaultValueFillCause.IFNULL;
 
     /**
-     * 当执行什么操作时生效
+     * @author wsil
+     * @return 触发时机的枚举
+     * <p>       
+     * 该方法的作用：
+     *   触发的时机
+     * </p>       
      */
     SqlCommandType[] happendTime();
 
     /**
-     * 填充回调方法
+     * @author wsil
+     *
+     * @return 回调接口类
+     * <p>
+     * 该方法的作用:
+     *
+     * </p>
      */
     Class<? extends MybatisDefaultValue> callBack() default ColumnDefaultValueFill.class;
 
     /**
-     * 日期格式,仅转换成日期时有效
+     * @author wsil
+     *
+     * @return 日期的格式
+     * <p>
+     * 该方法的作用: 由于日期具有多种格式，因此转换出来的日期对象，通过该方法指定
+     *
+     * </p>
      */
     String dateFormate() default "yyyy-MM-dd HH:mm:ss";
 
     /**
-     * 常量值
+     * @author wsil
+     *
+     * @return 常量值
+     * <p>
+     * 该方法的作用:
+     *  对于数据库里的有些列，我们可以直接指定默认值。
+     * </p>
      */
     String constant() default "";
 

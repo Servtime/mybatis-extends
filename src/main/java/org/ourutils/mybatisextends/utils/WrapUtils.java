@@ -113,10 +113,12 @@ public class WrapUtils {
 
 
     /**
-     * 获取列名称
+     * 获取列名称，该名称获取逻辑为
+     *  先查看是否有注解了{@link javax.persistence.Column}的注解
+     *  没有的情况下，直接获取列名
      *
-     * @param field
-     * @return
+     * @param field 获取列名称
+     * @return 对应数据库里的列名
      */
     public static String doGetColumnName(Field field) {
 
@@ -131,7 +133,7 @@ public class WrapUtils {
 
     /**
      * @param field 属性
-     * @return
+     * @return 获取jdbc的类型
      */
     public static JdbcType doGetJdbcType(Field field) {
 
@@ -158,10 +160,10 @@ public class WrapUtils {
 
 
     /**
-     * 转换
+     * 创建记录{@link java.lang.reflect.Field}的信息的内部对象
      *
-     * @param field
-     * @return
+     * @param field 属性
+     * @return 转换为内部封装的对象信息
      */
     public static Field2ColumnBo doGetField2ColumnBo(Field field) {
 
@@ -178,7 +180,7 @@ public class WrapUtils {
 
     /**
      * @author wsil
-     * @date 2023/12/6
+     * 
      * @param  field 属性列
      * @return
      * <p>
@@ -218,10 +220,10 @@ public class WrapUtils {
     /**
      * 判断属性在{@code data}是否存在非null的值
      *
-     * @param field2ColumnBo
-     * @param data
-     * @param executorContext
-     * @return
+     * @param field2ColumnBo 记录属性和数据库列信息的对象
+     * @param data 需要处理的数据信息
+     * @param executorContext 线程上下文传递信息的对象
+     * @return 判断属性在{@code data}是否存在非null的值
      */
     public static boolean hasValueIsNotNull(Field2ColumnBo field2ColumnBo, List data, ExecutorContext executorContext) {
         if (CollectionUtils.isEmpty(data)) {
@@ -242,10 +244,10 @@ public class WrapUtils {
     /**
      * 判断属性在{@code data}是否存在非null的值
      *
-     * @param field2ColumnBo
-     * @param data
-     * @param executorContext
-     * @return
+     * @param field2ColumnBo 记录列和属性信息的对象
+     * @param data 单个待处理的对象
+     * @param executorContext 线程上下文传递信息的对象
+     * @return 判断属性在{@code data}是否存在非null的值
      */
     public static boolean valueIsNotNull(Field2ColumnBo field2ColumnBo, Object data, ExecutorContext executorContext) {
         if (data == null) {

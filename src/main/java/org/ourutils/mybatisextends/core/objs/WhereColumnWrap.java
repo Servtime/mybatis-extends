@@ -75,8 +75,8 @@ public abstract class WhereColumnWrap<T> extends AbstractColumnWrap<T> {
     /**
      * 用于搜寻查询条件
      *
-     * @param fns
-     * @return
+     * @param fns 表映射实体的列函数
+     * @return 当前对象
      */
     public WhereColumnWrap<T> whereFields(SFunction<T, ?>... fns) {
         List<Field> fields = WrapUtils.doCollectionField(Arrays.stream(fns).parallel()

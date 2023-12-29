@@ -103,10 +103,9 @@ public class ColumnDefaultValueFill implements MybatisDefaultValue {
 
     /**
      * @author wsil
-     * @date 2023/12/24
      * @param  mybatisDefaultValueContext 上下文
      * @param  field 属性信息
-     * @return
+     * @return 获取待填充的单个对象
      * <p>
      * 该方法的作用：
      *   无法枚举为所有都适用的信息，因此获取默认值，留给拓展用

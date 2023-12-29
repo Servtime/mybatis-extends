@@ -57,7 +57,7 @@ public class UpdateColumnWrap<T>  extends WhereColumnWrap<T> {
     /**
      * 单个更新
      *
-     * @param data
+     * @param data 需要更新的数据和条件信息混合对象
      */
     public UpdateColumnWrap(T data) {
         super(data);
@@ -80,7 +80,7 @@ public class UpdateColumnWrap<T>  extends WhereColumnWrap<T> {
     /**
      * 批量更新
      *
-     * @param data
+     * @param data 数据信息
      */
     public UpdateColumnWrap(List<T> data) {
         super(data);
@@ -93,7 +93,8 @@ public class UpdateColumnWrap<T>  extends WhereColumnWrap<T> {
     /**
      * 单个更新
      *
-     * @param data
+     * @param data 需要更新的对象和条件信息
+     * @param executorContext 上下文信息
      */
     public UpdateColumnWrap(T data, ExecutorContext executorContext) {
         super(data, executorContext);
@@ -105,7 +106,8 @@ public class UpdateColumnWrap<T>  extends WhereColumnWrap<T> {
     /**
      * 批量更新
      *
-     * @param data
+     * @param data 需要更新的原始数据
+     * @param executorContext 上下文信息
      */
     public UpdateColumnWrap(List<T> data, ExecutorContext executorContext) {
         super(data, executorContext);
@@ -130,8 +132,8 @@ public class UpdateColumnWrap<T>  extends WhereColumnWrap<T> {
     /**
      * 更新需要忽略的信息
      *
-     * @param fns
-     * @return
+     * @param fns 需要忽略的列信息
+     * @return 当前对象
      */
     public UpdateColumnWrap<T> ignoreFields(SFunction<T, ?>... fns) {
         this.needIgnoreFields.addAll(WrapUtils.doCollectionField(Arrays.stream(fns).parallel()

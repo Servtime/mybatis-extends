@@ -40,7 +40,7 @@ public class ExecutorContext {
     /**
      * 用于便捷创建一个上下文类
      *
-     * @return
+     * @return 上下文传递信息的类
      */
     public static ExecutorContext newExecutorContext() {
         return new ExecutorContext();

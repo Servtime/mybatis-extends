@@ -10,7 +10,7 @@ import org.ourutils.mybatisextends.bo.UpdateField2ColumnBo;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-12-24T14:07:00+0800",
+    date = "2023-12-29T15:05:17+0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_202 (Oracle Corporation)"
 )
 public class Field2ColumnConvertsImpl implements Field2ColumnConverts {

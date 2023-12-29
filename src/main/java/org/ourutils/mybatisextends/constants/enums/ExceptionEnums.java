@@ -49,8 +49,8 @@ public enum ExceptionEnums {
     /**
      * 拼接异常信息
      *
-     * @param msgs
-     * @return
+     * @param msgs 占位符填充的字符窜
+     * @return 完整的异常信息
      */
     public String convertOrginMsg(String... msgs) {
 

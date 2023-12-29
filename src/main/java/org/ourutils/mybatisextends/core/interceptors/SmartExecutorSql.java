@@ -226,31 +226,26 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
 
     @Override
     public String addObj(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String addObjBatch(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String updateObj(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String updateObjBatch(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String updateObjBatchById(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
