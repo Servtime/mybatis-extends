@@ -204,6 +204,7 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
     private static String doParaseDel(Class clazz, Method method, String databaseId) {
         Template template = velocityEngine.getTemplate("deleteMapper.vm");
         StringWriter sw = new StringWriter();
+
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
         String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
