@@ -1,20 +1,19 @@
-package org.ourutils.mybatisextends.core.objs;
+package org.ourutils.mybatisextends.constants.enums;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-import org.apache.ibatis.mapping.SqlCommandType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  *******************************************************************************
  *    系统名称   ： mybatis-extends项目
  *    客户      ：  *
- *    文件名    ： org.ourutils.mybatisextends.core.objs.ExecutorContext.java
+ *    文件名    ： org.ourutils.mybatisextends.constants.enums.ThreadLocalKeyEnums.java
  *              (C) Copyright 2023 our-utils Corporation
  *               All Rights Reserved.
  * *****************************************************************************
  * <PRE>
  * 作用
- *       mybatis-extends的上下文
+ *       线程上下文枚举类
  * 限制
  *       无。
  * 注意事项
@@ -23,27 +22,17 @@ import org.apache.ibatis.mapping.SqlCommandType;
  * -----------------------------------------------------------------------------
  *         VERSION       DATE            @author       CHANGE/COMMENT
  * -----------------------------------------------------------------------------
- *         1.0.0        2023/12/5          wsil      create
+ *         1.0.0        2023/12/24          wsil      create
  * -----------------------------------------------------------------------------
  * </PRE>
  **/
-@Data
-@Accessors(chain = true)
-public class ExecutorContext {
+@AllArgsConstructor
+@Getter
+public enum ThreadLocalKeyEnums {
 
-    /**
-     * 执行的SQL类型
-     */
-    private SqlCommandType sqlCommandType;
+    DATASOURCE_PRODUCT("数据库类型");
 
+    private String des;
 
-    /**
-     * 用于便捷创建一个上下文类
-     *
-     * @return 上下文传递信息的类
-     */
-    public static ExecutorContext newExecutorContext() {
-        return new ExecutorContext();
-    }
 
 }

@@ -1,6 +1,8 @@
 package org.ourutils.mybatisextends.po;
 
 import lombok.Data;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.ourutils.mybatisextends.constants.annotations.DefaultValueFill;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -39,8 +41,8 @@ public class LockRecordPo implements Serializable {
     private Integer id;
 
 
-
     @Column(name = "lock_time")
+    @DefaultValueFill(happendTime = {SqlCommandType.INSERT})
     private Date lockTime;
 
 

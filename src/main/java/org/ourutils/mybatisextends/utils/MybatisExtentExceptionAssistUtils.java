@@ -34,7 +34,7 @@ public class MybatisExtentExceptionAssistUtils {
      *
      * @param exceptionEnums 异常枚举类
      * @param msges          异常的占位符信息
-     * @return
+     * @return 异常对象
      */
     public static MybatisExtentsException newInstanceWhthThreadLocal(ExceptionEnums exceptionEnums, String... msges) {
 
@@ -46,10 +46,10 @@ public class MybatisExtentExceptionAssistUtils {
     /**
      * 包装异常类信息
      *
-     * @param throwable
-     * @param exceptionEnums
-     * @param msges
-     * @return
+     * @param throwable 异常类
+     * @param exceptionEnums 错误码枚举类
+     * @param msges 错误码占位符
+     * @return 包裹异常类的异常类
      */
     public static MybatisExtentsException wrapException(Throwable throwable, ExceptionEnums exceptionEnums, String... msges) {
 

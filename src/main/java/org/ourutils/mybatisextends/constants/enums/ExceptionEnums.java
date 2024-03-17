@@ -31,7 +31,8 @@ import lombok.Getter;
 public enum ExceptionEnums {
 
     SMARTSQL_PARASE_ERROR("%s自动生成SQL异常,原因:%s", 2),
-    PARASE_ERROR("解析错误,原因:%s", 1);
+    PARASE_ERROR("解析错误,原因:%s", 1),
+    CONFIG_SETTING_ERROR("配置异常!", 0);
 
     /**
      * 异常信息
@@ -48,8 +49,8 @@ public enum ExceptionEnums {
     /**
      * 拼接异常信息
      *
-     * @param msgs
-     * @return
+     * @param msgs 占位符填充的字符窜
+     * @return 完整的异常信息
      */
     public String convertOrginMsg(String... msgs) {
 

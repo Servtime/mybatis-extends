@@ -1,0 +1,37 @@
+<script>
+        #if($!methodName=='selectOne'||$!methodName=='selectList')
+        select
+        <foreach collection="columnWrap.selectColumn" separator="," item="item">
+                        ${item.column} ${item.fieldName}
+        </foreach>
+        from
+            ${columnWrap.tableName}
+        <where>
+        <choose>
+        <when test="@org.apache.commons.collections4.CollectionUtils@isNotEmpty(columnWrap.datas) and columnWrap.datas.size()==1">
+                and
+                <foreach collection="columnWrap.datas" item="valueItem">
+                <foreach collection="columnWrap.whereColumns" item="columnValue">
+                and ${columnValue.column}=#{valueItem.${columnValue.fieldName},jdbcType=${columnValue.jdbcType.name()}}
+        </foreach>
+        </foreach>
+        </when>
+        <when test="@org.apache.commons.collections4.CollectionUtils@isNotEmpty(columnWrap.datas) and columnWrap.datas.size()>1">
+        <foreach collection="columnWrap.whereColumns" item="columnValue" >
+        <if test="@com.example.demo.mybatisp.utils.WrapUtils@hasValueIsNotNull(columnValue,columnWrap.datas,columnWrap.executorContext)">
+        and  ${columnValue.column} in
+        <foreach collection="columnWrap.datas" item="valueItem" open="(" close=")" separator=",">
+        <if test="@com.example.demo.mybatisp.utils.WrapUtils@valueIsNotNull(columnValue,valueItem,columnWrap.executorContext)">
+        #{valueItem.${columnValue.fieldName},jdbcType=${columnValue.jdbcType.name()}}
+        </if>
+        </foreach>
+        </if>
+        </foreach>
+        </when>
+        <otherwise>
+        1>2
+        </otherwise>
+        </choose>
+        </where>
+        #end
+</script>

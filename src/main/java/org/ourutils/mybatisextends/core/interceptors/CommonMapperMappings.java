@@ -1,11 +1,6 @@
 package org.ourutils.mybatisextends.core.interceptors;
 
 import org.apache.ibatis.builder.annotation.ProviderContext;
-import org.ourutils.mybatisextends.constants.enums.ExceptionEnums;
-import org.ourutils.mybatisextends.core.objs.AbstractColumnWrap;
-import org.ourutils.mybatisextends.utils.MybatisExtentExceptionAssistUtils;
-
-import java.lang.reflect.Method;
 
 /**
  *******************************************************************************
@@ -35,16 +30,16 @@ public interface CommonMapperMappings {
     /**
      * 生成增加单个对象的sql
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 插入对象的SQL
      */
     public String addObj(ProviderContext context);
 
     /**
      * 批量生成对象的sql
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 批量插入的SQL
      */
     public String addObjBatch(ProviderContext context);
 
@@ -52,8 +47,8 @@ public interface CommonMapperMappings {
     /**
      * 更新单个对象
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 修改对象的SQL
      */
     public String updateObj(ProviderContext context);
 
@@ -61,8 +56,8 @@ public interface CommonMapperMappings {
     /**
      * 批量更新单个对象
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 批量修改记录的SQL
      */
     public String updateObjBatch(ProviderContext context);
 
@@ -70,8 +65,8 @@ public interface CommonMapperMappings {
     /**
      * 批量通过id进行更新
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 通过ID修改记录的SQL
      */
     public String updateObjBatchById(ProviderContext context);
 
@@ -79,15 +74,15 @@ public interface CommonMapperMappings {
     /**
      * 删除单个对象
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 删除记录的SQL
      */
     public String deleteObj(ProviderContext context);
 
     /***
      * 查询单个对象
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 查询单个结果的SQL
      */
     public String selectOne(ProviderContext context);
 
@@ -95,39 +90,10 @@ public interface CommonMapperMappings {
     /**
      * 批量查询对象
      *
-     * @param context
-     * @return
+     * @param context Mybatis提供的生成SQL执行器的上下文信息
+     * @return 查询多个结果的SQL
      */
     public String selectList(ProviderContext context);
 
-    /**
-     * 获取入参
-     *
-     * @param context
-     * @return
-     */
-    default AbstractColumnWrap getParamClass(ProviderContext context) {
-        Class clazz = context.getMapperMethod().getParameterTypes()[0];
-        if (AbstractColumnWrap.class.isAssignableFrom(clazz)) {
-            return null;
-        }
-        throw MybatisExtentExceptionAssistUtils.newInstanceWhthThreadLocal(ExceptionEnums.SMARTSQL_PARASE_ERROR, context.getMapperMethod().getName(), "第一个入参不是AbstractColumnWrap的实现类!");
-    }
 
-    /**
-     * 获取唯一性的SQL标识
-     * <p>
-     * 我们将PO对象当作映射的类，所以每个类的{@link org.ourutils.mybatisextends.core.mapper.CommonMapper}对应的方法也必然是唯一的
-     *
-     * @param abstractColumnWrap
-     * @param method
-     * @return
-     */
-    default String getSQLID(AbstractColumnWrap abstractColumnWrap, Method method) {
-        return abstractColumnWrap.getTableClass().getName() + "#" + method.getName();
-    }
-
-    default String getCacheResult(ProviderContext context) {
-        return context.getMapperMethod().toString();
-    }
 }

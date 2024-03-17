@@ -41,8 +41,8 @@ public interface CommonMapper {
     /**
      * 新增数据
      *
-     * @param updateColumnWrap
-     * @param <T>
+     * @param updateColumnWrap 执行插入时，相关插入信息的包装类
+     * @param <T> 泛化参数，PO对象
      * @return 返回新增成功的数量
      */
     @InsertProvider(value = SmartExecutorSql.class)
@@ -52,9 +52,9 @@ public interface CommonMapper {
     /**
      * 批量添加
      *
-     * @param updateColumnWrap
-     * @param <T>
-     * @return
+     * @param updateColumnWrap  执行修改操作时，相关插入信息的包装类
+     * @param <T> PO对象
+     * @return 插入数量
      */
     @InsertProvider(value = SmartExecutorSql.class)
     public <T> Integer addObjBatch(@Param(value = "columnWrap") InsertColumnWrap<T> updateColumnWrap);
@@ -63,8 +63,8 @@ public interface CommonMapper {
     /**
      * 更新数据
      *
-     * @param updateColumnWrap
-     * @param <T>
+     * @param updateColumnWrap  执行更新时，相关插入信息的包装类
+     * @param <T> PO对象
      * @return 返回新增成功的数量
      */
     @UpdateProvider(value = SmartExecutorSql.class)
@@ -73,8 +73,8 @@ public interface CommonMapper {
     /**
      * 批量更新
      *
-     * @param updateColumnWrap
-     * @param <T>
+     * @param updateColumnWrap  执行批量更新时，相关插入信息的包装类
+     * @param <T> PO对象
      * @return 修改的数量
      */
     @UpdateProvider(value = SmartExecutorSql.class)
@@ -84,8 +84,8 @@ public interface CommonMapper {
     /**
      * 根据ID批量更新
      *
-     * @param updateColumnWrap
-     * @param <T>
+     * @param updateColumnWrap  执行根据ID批量更新时，相关插入信息的包装类
+     * @param <T> PO对象
      * @return 修改的数量
      */
     @UpdateProvider(value = SmartExecutorSql.class)
@@ -95,8 +95,8 @@ public interface CommonMapper {
     /**
      * 更新数据
      *
-     * @param updateColumnWrap
-     * @param <T>
+     * @param updateColumnWrap  执行删除时，相关插入信息的包装类
+     * @param <T> PO对象
      * @return 返回新增成功的数量
      */
     @DeleteProvider(value = SmartExecutorSql.class)
@@ -106,9 +106,9 @@ public interface CommonMapper {
     /**
      * 单个查询
      *
-     * @param selectColumnWrap
-     * @param <T>
-     * @return
+     * @param selectColumnWrap  执行查询时，相关插入信息的包装类
+     * @param <T> PO对象
+     * @return 查询结果集
      */
     @SelectProvider(value = SmartExecutorSql.class)
     public <T> T selectOne(@Param(value = "columnWrap") SelectColumnWrap<T> selectColumnWrap);
@@ -117,9 +117,9 @@ public interface CommonMapper {
     /**
      * 查询所有的
      *
-     * @param selectColumnWrap
-     * @param <T>
-     * @return
+     * @param selectColumnWrap  执行查询时，相关插入信息的包装类
+     * @param <T> PO对象
+     * @return 查询结果集
      */
     @SelectProvider(value = SmartExecutorSql.class)
     public <T> List<T> selectList(@Param(value = "columnWrap") SelectColumnWrap<T> selectColumnWrap);

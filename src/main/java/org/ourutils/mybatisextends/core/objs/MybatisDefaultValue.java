@@ -1,20 +1,18 @@
 package org.ourutils.mybatisextends.core.objs;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-import org.apache.ibatis.mapping.SqlCommandType;
+import java.lang.reflect.Field;
 
 /**
  *******************************************************************************
  *    系统名称   ： mybatis-extends项目
  *    客户      ：  *
- *    文件名    ： org.ourutils.mybatisextends.core.objs.ExecutorContext.java
+ *    文件名    ： org.ourutils.mybatisextends.core.objs.MybatisDefaultValue.java
  *              (C) Copyright 2023 our-utils Corporation
  *               All Rights Reserved.
  * *****************************************************************************
  * <PRE>
  * 作用
- *       mybatis-extends的上下文
+ *       默认值接口
  * 限制
  *       无。
  * 注意事项
@@ -23,27 +21,21 @@ import org.apache.ibatis.mapping.SqlCommandType;
  * -----------------------------------------------------------------------------
  *         VERSION       DATE            @author       CHANGE/COMMENT
  * -----------------------------------------------------------------------------
- *         1.0.0        2023/12/5          wsil      create
+ *         1.0.0        2023/12/21          wsil      create
  * -----------------------------------------------------------------------------
  * </PRE>
  **/
-@Data
-@Accessors(chain = true)
-public class ExecutorContext {
+public interface MybatisDefaultValue {
 
     /**
-     * 执行的SQL类型
-     */
-    private SqlCommandType sqlCommandType;
-
-
-    /**
-     * 用于便捷创建一个上下文类
+     * @author wsil
      *
-     * @return 上下文传递信息的类
+     * @param  mybatisDefaultValueContext 填充默认指的对象
+     * @param field 列
+     * <p>
+     * 该方法的作用：
+     *    默认值填充回调
+     * </p>
      */
-    public static ExecutorContext newExecutorContext() {
-        return new ExecutorContext();
-    }
-
+    public void fillValue(MybatisDefaultValueContext mybatisDefaultValueContext, Field field);
 }

@@ -29,8 +29,8 @@ public class LoggerWrapFactory {
 
     /**
      * @author wsil
-     * @date 2023/12/5
-     * @param  clazz
+     * 
+     * @param  clazz 记录标识的类
      * @return
      * <p>
      * 该方法的作用：
@@ -43,8 +43,8 @@ public class LoggerWrapFactory {
 
     /**
      * @author wsil
-     * @date 2023/12/5
-     * @param  logger
+     * 
+     * @param  logger 记录标识的常量信息
      * @return
      * <p>
      * 该方法的作用：

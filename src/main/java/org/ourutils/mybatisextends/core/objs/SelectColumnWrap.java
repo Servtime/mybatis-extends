@@ -58,8 +58,8 @@ public class SelectColumnWrap<T> extends WhereColumnWrap<T> {
     /**
      * 更新需要忽略的信息
      *
-     * @param fns
-     * @return
+     * @param fns 需要忽略的列，即不需要查询的
+     * @return 当前对象
      */
     public SelectColumnWrap<T> ignoreFields(SFunction<T, ?>... fns) {
         this.selectFields.addAll(WrapUtils.doCollectionField(Arrays.stream(fns).parallel()

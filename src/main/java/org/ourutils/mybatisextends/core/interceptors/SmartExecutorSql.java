@@ -3,18 +3,21 @@ package org.ourutils.mybatisextends.core.interceptors;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 import org.apache.ibatis.builder.annotation.ProviderMethodResolver;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.ourutils.mybatisextends.constants.enums.ThreadLocalKeyEnums;
 import org.ourutils.mybatisextends.core.objs.DeleteColumnWrap;
 import org.ourutils.mybatisextends.core.objs.InsertColumnWrap;
 import org.ourutils.mybatisextends.core.objs.LoggerWrap;
 import org.ourutils.mybatisextends.core.objs.LoggerWrapFactory;
 import org.ourutils.mybatisextends.core.objs.SelectColumnWrap;
 import org.ourutils.mybatisextends.core.objs.UpdateColumnWrap;
+import org.ourutils.mybatisextends.utils.DataSourceThreadLocalUtils;
 
 import java.io.StringWriter;
 import java.lang.reflect.Method;
@@ -79,14 +82,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      */
     private static String paraseColumnWrap(Class<?>[] classes, Method method) {
         Class clazz = classes[0];
+        String databaseId = DataSourceThreadLocalUtils.getValue(ThreadLocalKeyEnums.DATASOURCE_PRODUCT.name());
         if (DeleteColumnWrap.class.equals(clazz)) {
-            return doParaseDel(clazz, method);
+            return doParaseDel(clazz, method, databaseId);
         } else if (SelectColumnWrap.class.equals(clazz)) {
-            return doParaseSelect(clazz, method);
+            return doParaseSelect(clazz, method, databaseId);
         } else if (InsertColumnWrap.class.equals(clazz)) {
-            return doParaseInsert(clazz, method);
+            return doParaseInsert(clazz, method, databaseId);
         } else if (UpdateColumnWrap.class.equals(clazz)) {
-            return doParaseUpdate(clazz, method);
+            return doParaseUpdate(clazz, method, databaseId);
         } else {
             log.error("不支持的入参类型");
         }
@@ -98,11 +102,14 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseUpdate(Class clazz, Method method) {
+    private static String doParaseUpdate(Class clazz, Method method, String databaseId) {
         Template template = velocityEngine.getTemplate("updateMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
     }
@@ -112,18 +119,18 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseInsert(Class clazz, Method method) {
+    private static String doParaseInsert(Class clazz, Method method, String databaseId) {
 
         String result = "";
         String methodName = method.getName();
         switch (methodName) {
             case "addObj":
                 //单个插入
-                result = doParaseSigalInsert(clazz, method);
+                result = doParaseSigalInsert(clazz, method, databaseId);
                 break;
             case "addObjBatch":
                 //批量插入
-                result = doParaseBatchInsert(clazz, method);
+                result = doParaseBatchInsert(clazz, method,databaseId);
                 break;
         }
 
@@ -136,13 +143,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      * @param clazz
      * @param method
      */
-    private static String doParaseBatchInsert(Class clazz, Method method) {
+    private static String doParaseBatchInsert(Class clazz, Method method, String databaseId) {
 
         Template template = velocityEngine.getTemplate("insertMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
-        contentContext.put("sqlversion", "mysql");
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
     }
@@ -153,12 +162,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      * @param clazz
      * @param method
      */
-    private static String doParaseSigalInsert(Class clazz, Method method) {
+    private static String doParaseSigalInsert(Class clazz, Method method, String databaseId) {
 
         Template template = velocityEngine.getTemplate("insertMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
 
@@ -170,12 +182,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseSelect(Class clazz, Method method) {
+    private static String doParaseSelect(Class clazz, Method method, String databaseId) {
 
         Template template = velocityEngine.getTemplate("selectMapper.vm");
         StringWriter sw = new StringWriter();
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
 
@@ -186,11 +201,15 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
      *
      * @param clazz
      */
-    private static String doParaseDel(Class clazz, Method method) {
+    private static String doParaseDel(Class clazz, Method method, String databaseId) {
         Template template = velocityEngine.getTemplate("deleteMapper.vm");
         StringWriter sw = new StringWriter();
+
         VelocityContext contentContext = new VelocityContext();
         contentContext.put("methodName", method.getName());
+        String sql = StringUtils.containsIgnoreCase(databaseId, "mysql") ? "mysql" :
+                (StringUtils.containsIgnoreCase(databaseId, "oracle") ? "oracle" : "");
+        contentContext.put("sqlversion", sql);
         template.merge(contentContext, sw);
         return sw.toString();
 
@@ -208,31 +227,26 @@ public class SmartExecutorSql implements ProviderMethodResolver, CommonMapperMap
 
     @Override
     public String addObj(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String addObjBatch(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String updateObj(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String updateObjBatch(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 
     @Override
     public String updateObjBatchById(ProviderContext context) {
-        String result = getCacheResult(context);
         return loadingCache.getUnchecked(context);
     }
 

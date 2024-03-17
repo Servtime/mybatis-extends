@@ -38,9 +38,9 @@ public interface Field2ColumnConverts {
 
     /**
      * @author wsil
-     * @date 2023/12/5
-     * @param  fieldField2ColumnBoMap
-     * @return
+     * 
+     * @param  fieldField2ColumnBoMap java对象的属性和其描述信息的映射集合
+     * @return 修改函数的列及其描述信息的集合
      * <p>
      * 该方法的作用：
      *     用于转换列和属性对象信息
