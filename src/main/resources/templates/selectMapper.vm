@@ -18,10 +18,10 @@
         </when>
         <when test="@org.apache.commons.collections4.CollectionUtils@isNotEmpty(columnWrap.datas) and columnWrap.datas.size()>1">
         <foreach collection="columnWrap.whereColumns" item="columnValue" >
-        <if test="@com.example.demo.mybatisp.utils.WrapUtils@hasValueIsNotNull(columnValue,columnWrap.datas,columnWrap.executorContext)">
+        <if test="@org.ourutils.mybatisextends.utils.WrapUtils@hasValueIsNotNull(columnValue,columnWrap.datas,columnWrap.executorContext)">
         and  ${columnValue.column} in
         <foreach collection="columnWrap.datas" item="valueItem" open="(" close=")" separator=",">
-        <if test="@com.example.demo.mybatisp.utils.WrapUtils@valueIsNotNull(columnValue,valueItem,columnWrap.executorContext)">
+        <if test="@org.ourutils.mybatisextends.utils.WrapUtils@valueIsNotNull(columnValue,valueItem,columnWrap.executorContext)">
         #{valueItem.${columnValue.fieldName},jdbcType=${columnValue.jdbcType.name()}}
         </if>
         </foreach>

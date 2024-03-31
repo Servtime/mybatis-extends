@@ -1,7 +1,6 @@
 package org.ourutils.mybatisextends.core.interceptors;
 
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -13,18 +12,15 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.transaction.Transaction;
-import org.ourutils.mybatisextends.constants.enums.ExceptionEnums;
 import org.ourutils.mybatisextends.constants.enums.ThreadLocalKeyEnums;
 import org.ourutils.mybatisextends.core.objs.LoggerWrap;
 import org.ourutils.mybatisextends.core.objs.LoggerWrapFactory;
 import org.ourutils.mybatisextends.utils.DataSourceThreadLocalUtils;
-import org.ourutils.mybatisextends.utils.MybatisExtentExceptionAssistUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.util.List;
+import java.sql.SQLException;
 
 /**
  *******************************************************************************
@@ -69,52 +65,49 @@ public class DataSourcesInterceptor implements Interceptor {
     public Object intercept(Invocation invocation) throws Throwable {
         Method method = invocation.getMethod();
         String oldSql = null;
-        Connection connection = null;
-        boolean needClose = false;
-        boolean clearSqlVersion = false;
-        switch (method.getName()) {
-            case "update":
-            case "query":
-            case "queryCursor":
-                Transaction transaction = executor.getTransaction();
-                needClose = doCacularNeedClose(transaction);
-                connection = transaction.getConnection();
-                String sqlVersion = sqlVersion(connection);
-                oldSql = DataSourceThreadLocalUtils.setAndGet(ThreadLocalKeyEnums.DATASOURCE_PRODUCT.name(), sqlVersion);
-                clearSqlVersion = true;
-                break;
-        }
+
         try {
+            oldSql = fillSqlVersion(method);
             Object result = method.invoke(invocation.getTarget(), invocation.getArgs());
             return result;
         } catch (Exception e) {
             throw e;
         } finally {
             //清除设置的资源
-            if (clearSqlVersion) {
+            if (oldSql != null) {
                 DataSourceThreadLocalUtils.setAndGet(ThreadLocalKeyEnums.DATASOURCE_PRODUCT.name(), oldSql);
             }
-            //关闭资源
-            if (needClose) {
-                try {
-                    connection.close();
-                } catch (Exception e) {
-                    log.warn("关闭获取数据库产品的连接失败,该信息仅做提醒，关闭失败也对程序运行无影响！");
-                }
-            }
+
         }
     }
 
-    @SneakyThrows
-    private boolean doCacularNeedClose(Transaction transaction) {
-        List<Field> fields = FieldUtils.getAllFieldsList(transaction.getClass());
-        for (Field one : fields) {
-            if (Connection.class.isAssignableFrom(one.getType())) {
-                Object result = FieldUtils.readField(one, transaction, true);
-                return result == null;
+    /**
+     * @author wsil
+     * @return
+     * <p>
+     * 该方法的作用:
+     *   设置线程上下文中的sql类型
+     * </p>
+     */
+    private String fillSqlVersion(Method method) throws SQLException {
+        String oldVersion = null;
+        Connection connection = null;
+        try {
+            switch (method.getName()) {
+                case "update":
+                case "query":
+                case "queryCursor":
+                    Transaction transaction = executor.getTransaction();
+                    connection = transaction.getConnection();
+                    String sqlVersion = sqlVersion(connection);
+                    oldVersion = DataSourceThreadLocalUtils.setAndGet(ThreadLocalKeyEnums.DATASOURCE_PRODUCT.name(), sqlVersion);
+                    break;
             }
+        } catch (Exception e) {
+            throw e;
         }
-        throw MybatisExtentExceptionAssistUtils.newInstanceWhthThreadLocal(ExceptionEnums.CONFIG_SETTING_ERROR);
+        return oldVersion;
+
     }
 
 

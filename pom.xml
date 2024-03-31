@@ -43,6 +43,7 @@
         <common.io.version>2.7</common.io.version>
         <common.lang3.version>3.7</common.lang3.version>
         <common.codec.version>1.15</common.codec.version>
+        <common.lang.collection.verison>4.1</common.lang.collection.verison>
     </properties>
 
     <dependencies>
@@ -78,6 +79,11 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>${common.lang.collection.verison}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
